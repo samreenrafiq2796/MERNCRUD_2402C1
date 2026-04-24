@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Create from './Compo/Create';
 import GetData from './Compo/GetData';
 import "bootstrap-icons/font/bootstrap-icons.css"
+import Login from './Compo/Login';
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
     <div className="App">
       <Routes>
         <Route element={<Create/>} path="/cr"/>
-        <Route element={<GetData/>} path=""/>
+        <Route element={<GetData/>} path="/show"/>
+        <Route element={<Login/>} path=""/>
+
 
       </Routes>
     </div>

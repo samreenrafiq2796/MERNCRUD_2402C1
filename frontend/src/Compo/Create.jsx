@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
 
 export default function Create() {
     let [name, setName] = useState("")
     let [email, setEmail] = useState("")
+    let [pswd, setPswd] = useState("")
     let [age, setAge] = useState(0)
     let [marital, setMarital] = useState(true)
 
@@ -37,7 +39,8 @@ export default function Create() {
             name : name,
             email : email,
             age : age,
-            Is_Married : marital
+            Is_Married : marital,
+            password : pswd
         })
         toast.success(response.data.msg)
        } catch (error) {
@@ -60,6 +63,9 @@ export default function Create() {
         <p>Enter Your Email</p>
         <input type="email" className="form-control my-3" onChange={(e)=>setEmail(e.target.value)} value={email}/>
 
+        <p>Enter Your Password</p>
+        <input type="password" className="form-control my-3" onChange={(e)=>setPswd(e.target.value)} value={pswd}/>
+
         <p>Enter Your Age</p>
         <input type="number" className="form-control my-3" onChange={(e)=>setAge(e.target.value)} value={age}/>
 
@@ -70,6 +76,9 @@ export default function Create() {
         </select>
 
         <button className="btn btn-primary my-3" onClick={save}>Save</button>
+        <br />
+        <Link to="/">Already have Account</Link>
+
 
     </div>
   )

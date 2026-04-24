@@ -1,5 +1,6 @@
 const export_user = require("../Collection/User")
 let emailwork = require("nodemailer")
+let bcy = require("bcrypt")
 require("dotenv").config()
 
 let email_information = emailwork.createTransport({
@@ -31,18 +32,21 @@ let Contact = async function (req, res) {
 let saveData = async function (req, res) {
 
     try {
-        let { name, email, age, Is_Married } = req.body
+        let { name, email, age, Is_Married, password } = req.body
         // Email Check
         let email_exist = await export_user.findOne({ email: email })
         if (email_exist) {
             res.status(409).json({ msg: "Email Exist" })
         }
         else {
+            let hash_pswd = await bcy.hashSync(password, 12)
+
             let user = new export_user({
                 name: name,
                 email: email,
                 age: age,
-                Is_Married: Is_Married
+                Is_Married: Is_Married,
+                password: hash_pswd
             })
             user.save()
             res.status(200).json({ msg: "Data Saved Successfully" })
@@ -123,8 +127,40 @@ let update_user = async function (req, res) {
         return res.status(501).json({ msg: error })
     }
 
+
+}
+
+let login_user = async function (req, res) {
+    try {
+        let { email, password } = req.body
+
+        let find_email = await export_user.findOne({ email: email })
+
+        if (!find_email) {
+            return res.status(404).json({ msg: "Email Not Found" })
+        }
+
+        let change_password = await bcy.compare(password, find_email.password)
+
+        if (!change_password) {
+            return res.status(400).json({ msg: "Invalid Password" })
+
+        }
+        return res.status(200).json(
+            {
+                msg: "Login Successfully",
+                user: {
+                    id: find_email._id,
+                    name: find_email.name
+                }
+            })
+
+
+    } catch (error) {
+        return res.status(501).json({ msg: error })
+    }
 }
 
 
 
-module.exports = { Home, About, Contact, saveData, showdata, delete_user, update_user }
+module.exports = { Home, About, Contact, saveData, showdata, delete_user, update_user, login_user }

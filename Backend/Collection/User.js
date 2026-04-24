@@ -8,6 +8,9 @@ let User = new mongo.Schema({
     email : {
         type: String
     },
+    password : {
+        type: String
+    },
     age : {
         type: Number,
         required: true
