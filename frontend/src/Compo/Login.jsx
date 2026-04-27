@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import "react-toastify/dist/ReactToastify.css"
@@ -18,11 +19,12 @@ export default function Login() {
                 email : email,
                 password : pswd
             })
+            localStorage.setItem("user_data", JSON.stringify({"token" : res.data.token , "user_info" : res.data.user}))
             toast.success(res.data.msg)
             chalo("/show")
 
         } catch (error) {
-            toast.error(error.message)
+            toast.error(error.response?.data.msg)
         }
     }
   return (

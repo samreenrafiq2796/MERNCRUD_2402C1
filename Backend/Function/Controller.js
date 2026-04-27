@@ -1,6 +1,8 @@
 const export_user = require("../Collection/User")
 let emailwork = require("nodemailer")
 let bcy = require("bcrypt")
+let jwt = require("jsonwebtoken")
+
 require("dotenv").config()
 
 let email_information = emailwork.createTransport({
@@ -146,9 +148,11 @@ let login_user = async function (req, res) {
             return res.status(400).json({ msg: "Invalid Password" })
 
         }
+        let token = jwt.sign({id : find_email._id},process.env.KEY,{expiresIn : "1h"})
         return res.status(200).json(
             {
                 msg: "Login Successfully",
+                token,
                 user: {
                     id: find_email._id,
                     name: find_email.name

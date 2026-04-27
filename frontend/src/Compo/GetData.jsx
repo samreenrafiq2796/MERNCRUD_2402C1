@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
 export default function GetData() {
@@ -10,10 +10,21 @@ export default function GetData() {
     let [id, setId] = useState("")
     let [search, setSearch] = useState("")
     let [sort, setSort] = useState("")
-
+    let [username, setUsername] = useState("")
+    let chalo = useNavigate();
 
 
     useEffect(() => {
+        let data_uthao = localStorage.getItem("user_data");
+        if(data_uthao){
+            let convert_user = JSON.parse(data_uthao)
+            let user = convert_user.user_info.name
+            setUsername(user)
+        }
+        else{
+            chalo("/")
+        }
+
         fetch()
     }, [])
     async function fetch() {
@@ -84,11 +95,24 @@ export default function GetData() {
     else if(sort === "4"){
         filtered_data = filtered_data.sort((a,b)=>b.age - a.age)
     }
+
+    function logout(){
+        toast.info("You're logged out")
+        setTimeout(()=>{
+            localStorage.removeItem("user_data")
+            chalo("/")
+        }, 1000);
+      
+    }
     return (
         <div className='container'>
             <ToastContainer />
             <Link className="btn btn-secondary mt-3" to="cr">Add Record</Link>
             <div className="container">
+
+                <h1>Welcome {username}</h1>
+                <button className="my-3 btn btn-danger" onClick={logout}>Logout</button>
+
                 <input type="text" className="form-control my-3"
                     placeholder='Enter Name to Search'
                     value={search}
