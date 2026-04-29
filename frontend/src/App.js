@@ -7,6 +7,8 @@ import Create from './Compo/Create';
 import GetData from './Compo/GetData';
 import "bootstrap-icons/font/bootstrap-icons.css"
 import Login from './Compo/Login';
+import ForgetPassword from './Compo/ForgetPassword';
+import ResetPassword from './Compo/ResetPassword';
 
 function App() {
   return (
@@ -16,6 +18,10 @@ function App() {
         <Route element={<Create/>} path="/cr"/>
         <Route element={<GetData/>} path="/show"/>
         <Route element={<Login/>} path=""/>
+        <Route element={<ForgetPassword/>} path="/fp"/>
+        <Route element={<ResetPassword/>} path="/reset/:token"/>
+
+
 
 
       </Routes>

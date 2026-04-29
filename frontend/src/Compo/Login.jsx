@@ -40,6 +40,9 @@ export default function Login() {
         <button className="btn btn-primary my-3" onClick={login_func}>Login</button>
         <br />
         <Link to="/cr">Create Your Account</Link>
+        <br />
+        <Link to="/fp" className='text-danger my-2'>Forget Password</Link>
+
 
     </div>
   )

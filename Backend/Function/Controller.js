@@ -166,5 +166,40 @@ let login_user = async function (req, res) {
 }
 
 
+let foreget_password = async function(req,res){
+    try {
+        let {email} = req.body
+            // 1 check
+        let email_exist = await export_user.findOne({email})
+        if(!email_exist){
+            return res.status(404).json({msg: "User with this Email Not Found"})
+        }
+        
+        // 2 jwt token
+        let token = jwt.sign({id : email_exist._id }, process.env.KEY, {expiresIn : "10m"})
+        let url = `http://localhost:3000/reset/${token}`;
 
-module.exports = { Home, About, Contact, saveData, showdata, delete_user, update_user, login_user }
+
+        //3 email ka content
+        let email_body = {
+            to : email,
+            from : process.env.EMAIL,
+            subject : "Reset Your Password",
+            html : `<p>Hi ${email_exist.name}</p><br/><br/><p>Your Password Reset Link is ${url}</p>`
+        }
+
+        //4 email bhej di
+        email_information.sendMail(email_body, function(e,i){
+            if(e){
+                console.log(e)
+            }
+        })
+
+        // 5 msg
+        return res.status(200).json({msg: "PAssword Reset Email has been send"})
+
+    } catch (error) {
+        return res.status(501).json({msg:error.message})
+    }           
+}
+module.exports = { Home, About, Contact, saveData, showdata, delete_user, update_user, login_user, foreget_password }
